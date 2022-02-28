@@ -1,5 +1,5 @@
 import os
-from camera_enumerations import ISO, CaptureType
+from .camera_enumerations import ISO, CaptureType, WhiteBalance
 
 
 class CameraControl:
@@ -14,8 +14,17 @@ class CameraControl:
         command = f'gphoto2 --get-config /main/imgsettings/iso'
         return self._execute_command_(command)
 
+    def get_white_balance(self):
+        command = f' gphoto2 --get-config /main/imgsettings/whitebalance'
+        return self._execute_command_(command)
+
     def set_ISO(self, iso):
         command = f'gphoto2 --set-config /main/imgsettings/iso={iso.value}'
+        return self._execute_command_(command)
+
+    def set_white_balance(self, wb):
+        print(wb.value)
+        command = f'gphoto2 --set-config /main/imgsettings/whitebalance={wb.value}'
         return self._execute_command_(command)
 
     def _set_base_path(self):
@@ -32,13 +41,15 @@ if __name__ == '__main__':
     camera = CameraControl()
     camera._set_base_path()
     print(camera._execute_command_('gphoto2 --auto-detect'))
-    print(camera.set_ISO(ISO.ISO_80))
-    print(camera.capture_image(CaptureType.Save))
-
-    print(camera.set_ISO(ISO.ISO_400))
-    print(camera.capture_image(CaptureType.Save))
-
-    print(camera.set_ISO(ISO.ISO_1600))
-    print(camera.capture_image(CaptureType.Save))
+    # print(camera.set_ISO(ISO.ISO_80))
+    print(camera.get_white_balance())
+    print(camera.set_white_balance(WhiteBalance.Auto))
+    # print(camera.capture_image(CaptureType.Base))
+    #
+    # print(camera.set_ISO(ISO.ISO_400))
+    # print(camera.capture_image(CaptureType.Save))
+    #
+    # print(camera.set_ISO(ISO.ISO_1600))
+    # print(camera.capture_image(CaptureType.Save))
 
 
