@@ -25,3 +25,11 @@ class WhiteBalance(Enum):
     Fluorescent_H = 5
     Unknown = 6
     Custom = 7
+
+
+class ShootingMode(Enum):
+    Auto = 0
+    TV = 1
+    AV = 2
+    Manual = 3
+

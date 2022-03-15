@@ -1,32 +1,40 @@
-import time
+# test-server.py
+import socket
+from server_communicator.CommandParser import command_parser
+import json
 
-from server_communicator.request_api import get_commands, del_command, post_command
-from basic_camera_functions.camera_enumerations import ISO, CaptureType, WhiteBalance
-from basic_camera_functions.function import CameraControl
-from os import listdir, remove
+# создаемTCP/IP сокет
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+# Привязываем сокет к порту
+server_address = ('localhost', 10001)
+print('Старт сервера на {} порт {}'.format(*server_address))
+sock.bind(server_address)
 
-def main_loop():
-    camera = CameraControl()
-    camera._set_base_path()
-    camera._execute_command_('gphoto2 --auto-detect')
-    while True:
-        commands = get_commands()
-        for command in commands:
-            if command.get('command') == 'capture_image':
-                camera.capture_image(CaptureType.Save)
-                files = listdir()
-                jpg_file = [file for file in files if file.endswith('.JPG')][-1]
-                with open(jpg_file, 'rb') as fb:
-                    post_command(command={'command': 'save_file'}, file={'files': fb})
-                remove(jpg_file)
-            elif command.get('command') == 'set_ISO':
-                camera.set_ISO(ISO[command.get('parameter')])
-            elif command.get('command') == 'set_white_balance':
-                camera.set_white_balance(WhiteBalance[command.get('parameter')])
-            del_command(command.get('id'))
-        time.sleep(0.5)
+# Слушаем входящие подключения
+sock.listen(1)
 
+while True:
+    # ждем соединения
+    print('Ожидание соединения...')
+    connection, client_address = sock.accept()
+    try:
+        print('Подключено к:', client_address)
+        # Принимаем данные порциями и ретранслируем их
+        while True:
+            data = connection.recv(1024)
+            print(f'Получено: {data.decode()}')
+            if data:
+                print('Обработка данных...')
+                json_string = data.decode('utf-8')
+                json_data = json.loads(json_string)
+                answer = command_parser(json_data)
+                print('Ответ серверу на запрос...')
+                connection.sendall(answer)
+            else:
+                print('Нет данных от:', client_address)
+                break
 
-if __name__ == '__main__':
-    main_loop()
+    finally:
+        # Очищаем соединение
+        connection.close()
