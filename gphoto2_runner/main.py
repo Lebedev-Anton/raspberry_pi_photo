@@ -9,7 +9,7 @@ import json
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Привязываем сокет к порту
-server_address = ('localhost', 10002)
+server_address = ('localhost', 10001)
 sock.bind(server_address)
 
 # Слушаем входящие подключения
@@ -21,12 +21,11 @@ while True:
     try:
         # Принимаем данные порциями и ретранслируем их
         while True:
-            data = connection.recv(1024)
+            data = connection.recv(4096)
             if data:
                 json_string = data.decode('utf-8')
                 json_data = json.loads(json_string)
                 answer = command_parser(json_data)
-                # print(answer)
                 if answer == 'stop_server':
                     sys.exit()
                 connection.sendall(answer)

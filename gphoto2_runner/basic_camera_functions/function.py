@@ -36,15 +36,17 @@ class CameraControl:
         return self._execute_command_(command)
 
     def get_camera_setting(self):
-        self.get_ISO()
-        self.get_white_balance()
-        self.get_zoom()
-        self.get_exposure()
-        self.get_flashcompensation()
-        self.get_aperture()
-        self.get_focusingpoint()
-        self.get_shutterspeed()
-        self.get_shootingmode()
+        camera_setting = {}
+        camera_setting['IS0'] = self.get_ISO()
+        camera_setting['white_balance'] = self.get_white_balance()
+        camera_setting['zoom'] = self.get_zoom()
+        camera_setting['exposure'] = self.get_exposure()
+        camera_setting['flashcompensation'] = self.get_flashcompensation()
+        camera_setting['aperture'] = self.get_aperture()
+        camera_setting['focusingpoint'] = self.get_focusingpoint()
+        camera_setting['shutterspeed'] = self.get_shutterspeed()
+        camera_setting['shootingmode'] = self.get_shootingmode()
+        return {'Current': camera_setting}
 
     def get_ISO(self):
         command = f'gphoto2 --get-config /main/imgsettings/iso'
@@ -260,7 +262,6 @@ class CameraControl:
         return os.system(command)
 
     def _is_readonly_(self, parameter_dict):
-        print(parameter_dict)
         readonly = parameter_dict['Readonly']
         return int(readonly)
 
