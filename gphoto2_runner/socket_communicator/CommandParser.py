@@ -49,3 +49,4 @@ def command_parser(json_data):
     pars_command.set_command(command)
     pars_command.set_parameter(parameter)
     return pars_command.run_command()
+
