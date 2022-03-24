@@ -22,6 +22,7 @@ while True:
         # Принимаем данные порциями и ретранслируем их
         while True:
             data = connection.recv(4096)
+            print(data)
             if data:
                 json_string = data.decode('utf-8')
                 json_data = json.loads(json_string)
