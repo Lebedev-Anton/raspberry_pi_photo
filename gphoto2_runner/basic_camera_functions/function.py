@@ -37,7 +37,7 @@ class CameraControl:
 
     def get_camera_setting(self):
         camera_setting = {}
-        camera_setting['IS0'] = self.get_ISO()
+        camera_setting['ISO'] = self.get_ISO()
         camera_setting['white_balance'] = self.get_white_balance()
         camera_setting['zoom'] = self.get_zoom()
         camera_setting['exposure'] = self.get_exposure()
