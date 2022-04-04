@@ -144,10 +144,8 @@ def get_camera_setting(ip, port):
     sock.connect(server_address)
     res = _send_command_(sock, inspect.stack()[0][3])
     sock.close()
-    # print(res)
-    # print('\n')
 
-    print('ISO', 'Current:' + str(res['ISO']['Current']), '|' + str(res['IS0']['Choice'])[1:-1])
+    print('ISO', 'Current:' + str(res['ISO']['Current']), '|' + str(res['ISO']['Choice'])[1:-1])
     print('white_balance', 'Current:' + str(res['white_balance']['Current']), '|' + str(res['white_balance']['Choice'])[1:-1])
     print('exposure', 'Current:' + str(res['exposure']['Current']), '|' + str(res['exposure']['Choice'])[1:-1])
     print('flashcompensation', 'Current:' + str(res['flashcompensation']['Current']), '|' + str(res['flashcompensation']['Choice'])[1:-1])
